@@ -53,5 +53,7 @@ public class PlatformerPlayer : MonoBehaviour
         {
             transform.localScale = new Vector3(Mathf.Sign(_deltaX), 1, 1);
         }
+
+        _rigidbody.gravityScale = _isGrounded && _deltaX == 0 ? 0 : 1;
     }
 }
