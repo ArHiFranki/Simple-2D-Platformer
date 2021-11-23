@@ -10,6 +10,7 @@ public class PlatformerPlayer : MonoBehaviour
 
     private Rigidbody2D _rigidbody;
     private Animator _animator;
+    private float _deltaX;
 
     private void Start()
     {
@@ -19,19 +20,22 @@ public class PlatformerPlayer : MonoBehaviour
 
     private void Update()
     {
-        float deltaX = Input.GetAxis("Horizontal") * _speed * Time.deltaTime;
-        Vector2 movement = new Vector2(deltaX, _rigidbody.velocity.y);
-        _rigidbody.velocity = movement;
-
-        _animator.SetFloat("speed", Mathf.Abs(deltaX));
-        if (!Mathf.Approximately(deltaX, 0))
-        {
-            transform.localScale = new Vector3(Mathf.Sign(deltaX), 1, 1);
-        }
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _rigidbody.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        _deltaX = Input.GetAxis("Horizontal") * _speed * Time.fixedDeltaTime;
+        Vector2 movement = new Vector2(_deltaX, _rigidbody.velocity.y);
+        _rigidbody.velocity = movement;
+
+        _animator.SetFloat("speed", Mathf.Abs(_deltaX));
+        if (!Mathf.Approximately(_deltaX, 0))
+        {
+            transform.localScale = new Vector3(Mathf.Sign(_deltaX), 1, 1);
         }
     }
 }
