@@ -48,10 +48,32 @@ public class PlatformerPlayer : MonoBehaviour
             _isGrounded = true;
         }
 
+        MovingPlatform platform = null;
+        if (hit != null)
+        {
+            platform = hit.GetComponent<MovingPlatform>();
+        }
+
+        if (platform != null)
+        {
+            transform.parent = platform.transform;
+        }
+        else
+        {
+            transform.parent = null;
+        }
+
         _animator.SetFloat("speed", Mathf.Abs(_deltaX));
+
+        Vector3 pScale = Vector3.one;
+        if (platform != null)
+        {
+            pScale = platform.transform.localScale;
+        }
+
         if (!Mathf.Approximately(_deltaX, 0))
         {
-            transform.localScale = new Vector3(Mathf.Sign(_deltaX), 1, 1);
+            transform.localScale = new Vector3(Mathf.Sign(_deltaX)/pScale.x, 1/pScale.y, 1);
         }
 
         _rigidbody.gravityScale = _isGrounded && _deltaX == 0 ? 0 : 1;
