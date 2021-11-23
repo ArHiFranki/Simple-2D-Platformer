@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlatformerPlayer : MonoBehaviour
 {
     [SerializeField] private float _speed = 250.0f;
+    [SerializeField] private float _jumpForce = 12.0f;
 
     private Rigidbody2D _rigidbody;
     private Animator _animator;
@@ -26,6 +27,11 @@ public class PlatformerPlayer : MonoBehaviour
         if (!Mathf.Approximately(deltaX, 0))
         {
             transform.localScale = new Vector3(Mathf.Sign(deltaX), 1, 1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _rigidbody.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
         }
     }
 }
